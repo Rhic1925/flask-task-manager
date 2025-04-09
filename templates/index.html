@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <form action="/add" method="POST">
+            <input type="text" name="title" placeholder="Task title" required>
+            <textarea name="description" placeholder="Description"></textarea>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+            <li class="{{ 'completed' if task.status == 'Completed' else '' }}">
+                <strong>{{ task.title }}</strong> – {{ task.description or 'No description' }}
+                <small>{{ task.created_at.strftime('%Y-%m-%d') }}</small>
+                {% if task.status != 'Completed' %}
+                    <a href="/complete/{{ task.id }}">✅ Complete</a>
+                {% endif %}
+                <a href="/delete/{{ task.id }}">🗑 Delete</a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <a href="/reports">📊 View Reports</a>
+    </div>
+</body>
+</html>
