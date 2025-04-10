@@ -2,6 +2,8 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import os
+from flask import send_from_directory
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
@@ -40,6 +42,12 @@ def add_task():
     db.session.add(new_task)
     db.session.commit()
     return redirect(url_for('index'))
+
+
+@app.route('/download-db')
+def download_db():
+    database_path = os.path.join(os.getcwd(), 'task.db')
+    return send_from_directory(os.path.dirname(C:\Users\Admin1\PycharmProjects\PMSystemImprove\instance), os.path.basename(C:\Users\Admin1\PycharmProjects\PMSystemImprove\instance))
 
 @app.route('/complete/<int:id>')
 def complete_task(id):
