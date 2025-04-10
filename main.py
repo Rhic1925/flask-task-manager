@@ -47,7 +47,7 @@ def add_task():
 @app.route('/download-db')
 def download_db():
     database_path = os.path.join(os.getcwd(), 'task.db')
-   return send_from_directory(os.path.dirname(database_path), os.path.basename(database_path))
+    return send_from_directory(os.path.dirname(database_path), os.path.basename(database_path))
 
 @app.route('/complete/<int:id>')
 def complete_task(id):
