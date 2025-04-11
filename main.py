@@ -47,12 +47,10 @@ def add_task():
 @app.route('/download-db')
 def download_db():
     try:
-        # Use the directory of the current Python file (more reliable than os.getcwd())
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        db_path = os.path.join(base_dir, 'instance', 'task.db')
-
-        print(f"[DEBUG] DB path resolved to: {db_path}")  # Will show in Render logs
-
+        # Adjust this to the actual path on Render
+        db_path = os.path.join(os.path.dirname(__file__), 'instance', 'tasks.db')
+        
+        # Check if the database exists
         if not os.path.exists(db_path):
             return f"Error: Database not found at {db_path}", 404
 
@@ -60,7 +58,7 @@ def download_db():
 
     except Exception as e:
         return f"Internal Server Error: {str(e)}", 500
-
+        
 @app.route('/complete/<int:id>')
 def complete_task(id):
     task = Task.query.get_or_404(id)
