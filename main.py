@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from flask import send_from_directory
+from flask import send_file
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
@@ -46,8 +47,8 @@ def add_task():
 
 @app.route('/download-db')
 def download_db():
-    database_path = os.path.join(os.getcwd(), 'task.db')
-    return send_from_directory(os.path.dirname(database_path), os.path.basename(database_path))
+    db_path = os.path.join(os.getcwd(), 'task.db')
+    return send_file(db_path, as_attachment=True)
 
 @app.route('/complete/<int:id>')
 def complete_task(id):
