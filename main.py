@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from flask import send_from_directory
-from flask import send_file
+from flask import send_file, abort
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
@@ -44,12 +44,22 @@ def add_task():
     db.session.commit()
     return redirect(url_for('index'))
 
-
 @app.route('/download-db')
 def download_db():
-    db_filename = 'task.db'
-    db_path = os.path.join(os.path.dirname(__file__), db_filename)
-    return send_file(db_path, as_attachment=True)
+    try:
+        # Use the directory of the current Python file (more reliable than os.getcwd())
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(base_dir, 'instance', 'task.db')
+
+        print(f"[DEBUG] DB path resolved to: {db_path}")  # Will show in Render logs
+
+        if not os.path.exists(db_path):
+            return f"Error: Database not found at {db_path}", 404
+
+        return send_file(db_path, as_attachment=True)
+
+    except Exception as e:
+        return f"Internal Server Error: {str(e)}", 500
 
 @app.route('/complete/<int:id>')
 def complete_task(id):
