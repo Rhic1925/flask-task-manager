@@ -47,7 +47,8 @@ def add_task():
 
 @app.route('/download-db')
 def download_db():
-    db_path = os.path.join(os.getcwd(), 'task.db')
+    db_filename = 'task.db'
+    db_path = os.path.join(os.path.dirname(__file__), db_filename)
     return send_file(db_path, as_attachment=True)
 
 @app.route('/complete/<int:id>')
